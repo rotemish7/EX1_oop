@@ -15,6 +15,7 @@ public class ComplexFunction implements complex_function
 	
 	public ComplexFunction(Operation op, function f1, function f2)
 	{
+		//blabla
 		this.left = f1;
 		this.right = f2;
 		this.op = op;
