@@ -35,11 +35,17 @@ public class tester
 //		System.out.println("Operation.Max, cf , cf2");
 //		System.out.println(cf3.toString());
 		
-		//String str = "Max(Plus(+3.0x^3+1.0x^2+3.0,+1.0x^2+3.0x),Divid(Plus(+3.0x^3+1.0x^2+3.0,+1.0x^2+3.0x),+3.0x^3+1.0x^2+3.0))";
-		String str = "Plus(+3.0x^3+1.0x^2+3.0,+1.0x^2+3.0x)";
+//		String str = "max(+1.0x^2,+3.0)";
+//		String str = "max(plus(+3.0x+1.0,+1.0x^2),+3.0)";
+		String str = "div(plus(+2.4x^2, +0.1), plus(-1.0x,+1.0))";
+		String str1 = "min(min(min(min(plus (-1.0x^4 +2.4x^2+3.1,+0.1x^5-1.2999999999999998x+5.0),plus(div(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)";
+//		String str = "+3.0x+1.0";
+//		String str = "plus(+3.0x+1.0,+1.0x^2)";
 		function f8 = new ComplexFunction(null);
-		f8.initFromString(str);
-		System.out.println(f8.toString());
+		f8.initFromString(str1);
+		System.out.println("f8 = " + f8);
+		
+		
 		
 		
 		

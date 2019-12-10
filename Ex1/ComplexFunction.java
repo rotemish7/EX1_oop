@@ -5,21 +5,51 @@ public class ComplexFunction implements complex_function
 	function right;
 	function left;
 	Operation op;
-	
+
 	public  ComplexFunction(function f1) 
 	{
 		this.left = f1;
 		this.right = null;
 		this.op = Operation.None;
 	}
-	
-	public  ComplexFunction(Operation op, function f1, function f2) 
+
+	public ComplexFunction(Operation op, function f1, function f2) 
 	{
 		this.left = f1;
 		this.right = f2;
 		this.op = op;
 	}
-	
+
+	public ComplexFunction(String str, function polynom, function cf) 
+	{
+		if (str.equals("plus"))
+		{
+			this.op = Operation.Plus;
+		}
+		else if (str.equals("mul"))
+		{
+			this.op = Operation.Times;
+		}
+		else if (str.equals("div"))
+		{
+			this.op = Operation.Divid;
+		}
+		else if (str.equals("max"))
+		{
+			this.op = Operation.Max;
+		}
+		else if (str.equals("min"))
+		{
+			this.op = Operation.Min;
+		}
+		else if (str.equals("comp"))
+		{
+			this.op = Operation.Comp;
+		}
+		this.left = polynom;
+		this.right = cf;
+	}
+
 	/** Add to this complex_function the f1 complex_function
 	 * 
 	 * @param f1 the complex_function which will be added to this complex_function.
@@ -139,7 +169,7 @@ public class ComplexFunction implements complex_function
 			this.right = f1;
 			this.op = Operation.Comp;
 		}
-		
+
 	}
 	/** returns the left side of the complex function - this side should always exists (should NOT be null).
 	 * @return a function representing the left side of this complex funcation
@@ -191,77 +221,83 @@ public class ComplexFunction implements complex_function
 	@Override
 	public function initFromString(String s) 
 	{
+		s = s.replaceAll("\\s+","");
 		if (!s.contains("("))
 		{
 			Polynom p = new Polynom(s);
+			this.left=p;
+			this.right=null;
+			this.op=Operation.None;
 			return p;
 		}
-		int count=0, flag=0, j=0;
+		int count=0, j=0;
 		Operation oper = Operation.None;
-		function f = new ComplexFunction(null);
 		for (int i = 0; i < s.length(); i++)
 		{
 			if (s.charAt(i) == '(' && count == 0)
 			{
 				String str = s.substring(0, i);
-				if (str.equals("Plus"))
+				if (str.equals("plus"))
 				{
 					oper = Operation.Plus;
 				}
-				else if (str.equals("Times"))
+				else if (str.equals("mul"))
 				{
 					oper = Operation.Times;
 				}
-				else if (str.equals("Divid"))
+				else if (str.equals("div"))
 				{
 					oper = Operation.Divid;
 				}
-				else if (str.equals("Max"))
+				else if (str.equals("max"))
 				{
 					oper = Operation.Max;
 				}
-				else if (str.equals("Min"))
+				else if (str.equals("min"))
 				{
 					oper = Operation.Min;
 				}
-				else if (str.equals("Comp"))
+				else if (str.equals("comp"))
 				{
 					oper = Operation.Comp;
 				}
-				count++;
-				flag = 1;
 				j=i;
 			}
-			if (s.charAt(i) == '(' && flag != 1)
+			if (s.charAt(i) == '(')
 			{
 				count++;
-				flag = 0;
 			}
 			if (s.charAt(i) == ')')
 			{
 				count--;
 			}
-			if (count == 1 && flag != 1)
+			if (count == 1 && (s.charAt(i+1) == ','))
 			{
 				String sub = s.substring(j+1, i+1);
-				String sub2 = s.substring(i+2, s.length());
+				String sub2 = s.substring(i+2, s.length()-1);
 				function p1 = initFromString(sub);
+				function p11 = p1.copy();
 				function p2 = initFromString(sub2);
-				ComplexFunction cf = new ComplexFunction(oper, p1, p2);
-				f=cf;
+				function p21 = p2.copy();
+				this.left = p11;
+				this.op = oper;
+				this.right = p21;
+				return this;
 			}
-			if (count == 0)
+			if (count == 0 && i == s.length()-1)
 			{
 				String [] sub = s.split(",");
 				function p1 = initFromString(s.substring(j+1, sub[0].length()));
-				function p2 = initFromString(sub[1].substring(0, sub[1].length()));
-				ComplexFunction cf = new ComplexFunction(oper, p1, p2);
-				f=cf;
-			}
+				function p2 = initFromString(sub[1].substring(0, sub[1].length()-1));
+				this.left = p1;
+				this.op = oper;
+				this.right = p2;
+				return this;
+			} 
 		}
-		return f;
+		return this;
 	}
-	
+
 	@Override
 	public function copy() 
 	{
@@ -272,10 +308,10 @@ public class ComplexFunction implements complex_function
 	public String toString()
 	{
 		String ans = "";
-		ans += this.op + "(" + this.left + ", " + this.right + ")";
+		ans += this.op + "(" + this.left + "," + this.right + ")";			
 		return ans;
 	}
-	
+
 	public boolean equals(Object obj)
 	{
 		boolean flag = false;

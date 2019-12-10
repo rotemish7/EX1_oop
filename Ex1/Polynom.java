@@ -381,12 +381,11 @@ public class Polynom implements Polynom_able
 
 	public function copy()
 	{
-		function copy = new Polynom();
+		Polynom copy = new Polynom();
 
 		for (int i = 0; i < this.poly.size(); i++) 
 		{
-			Monom m = new Monom(this.poly.get(i));
-			((Monom) copy).add(m);
+			copy.add((Monom)this.poly.get(i).copy());
 		}
 
 		return copy;
