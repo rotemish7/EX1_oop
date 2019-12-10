@@ -30,73 +30,59 @@ public class MonomTest {
 	}
 
 	@After
-	public void reset() 
-	{
-		for (int i=0; i<mArr.length; i++) 
-		{
+	public void reset() {
+		for (int i=0; i<mArr.length; i++) {
 			mArr[i] = null;
 		}
 	}
 
 	@Test
-	public void testGetCoe() 
-	{
+	public void testGetCoe() {
 		double [] ansCoe = {2,-1,-3.2,0,5};
-		for(int i=0; i>mArr.length; i++) 
-		{
+		for(int i=0; i>mArr.length; i++) {
 			double coe = mArr[i].get_coefficient();
 			assertEquals("Test f:",coe,ansCoe[i],0.00001);
 		}
 	}
-
+	
 	@Test
-	public void testGetPow() 
-	{
+	public void testGetPow() {
 		double [] ansPow = {0,1,2,0,3};
-		for(int i=0; i>mArr.length; i++) 
-		{
+		for(int i=0; i>mArr.length; i++) {
 			double pow = mArr[i].get_power();
 			assertEquals("Test f:",pow,ansPow[i],0.00001);
 		}
 	}
-
+	
 	@Test
-	public void testIsZero()
-	{
-		for(int i=0; i<mArr.length; i++) 
-		{
+	public void testIsZero() {
+		for(int i=0; i<mArr.length; i++) {
 			assertTrue("Test isZero:", mArr[i].isZero());
 		}
 	}
-
+	
 	@Test
-	public void testDerivative() 
-	{
+	public void testDerivative() {
 		Monom [] ansDer = {new Monom ("0"), new Monom ("-1"), new Monom ("-6.4x"), new Monom ("0"), new Monom ("15x^2")} ;
-		for(int i=0; i<mArr.length; i++) 
-		{
+		for(int i=0; i<mArr.length; i++) {
 			Monom der = mArr[i].derivative();
 			assertEquals("Test derivative:",der,ansDer[i]);
 		}
 	}
 
 	@Test
-	public void testF() 
-	{
+	public void testF() {
 		double [] ansF = {-2,1,-3.2,0,-5};
-		for(int i=0; i<mArr.length; i++) 
-		{
+		for(int i=0; i<mArr.length; i++) {
 			double f = mArr[i].f(-1);
 			assertEquals("Test f:",f,ansF[i],0.00001);
 		}
 	}
 
 	@Test
-	public void testStringAndMonom() 
-	{
+	public void testStringAndMonom() {
 		String[] monoms = {"2", "-x","-3.2x^2","0","5x^3"};
-		for(int i=0; i<mArr.length; i++) 
-		{
+		for(int i=0; i<mArr.length; i++) {
 			Monom m = new Monom(monoms[i]);
 			String s = m.toString();
 			assertEquals("Test toString: ", s, monoms[i]);
@@ -105,40 +91,34 @@ public class MonomTest {
 		}		
 	}
 
-	// 2, -x, -3.2x^2, 0, 5x^3
 	@Test
-	public void testAdd() 
-	{
-			for(int i=0; i<mArr.length; i++) 
-			{
-				try
-				{
-					mArr[i].add(new Monom(-1,0));
-					mArr[i].add(new Monom (0.2,2));
-				}
-				catch (Exception e) {
-					System.out.println(e);
-				}
-			}
+	public void testAdd() {
+		Monom [] ansAdd = {new Monom ("1"), new Monom ("-1"), new Monom ("-3x^2"), new Monom ("0"), new Monom ("5x^3")} ;
+		try {
+		for(int i=0; i<mArr.length; i++) {
+			mArr[i].add(new Monom(-1,0));
+			mArr[i].add(new Monom (0.2,2));
+			assertEquals("Test add: ", mArr[i], ansAdd[i]);
+		}
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
+		
 	}
 
 	@Test
-	public void testMult() 
-	{
+	public void testMult() {
 		Monom [] ansMul = {new Monom ("-2"), new Monom ("1"), new Monom ("3.2x^2"), new Monom ("0"), new Monom ("-5x^3")} ;
-		for(int i=0; i<mArr.length; i++) 
-		{
+		for(int i=0; i<mArr.length; i++) {
 			mArr[i].multipy(new Monom(-1,0));
 			assertEquals("Test multipy: ", mArr[i], ansMul[i]);
 		}
 	}
 
 	@Test
-	public void testEquals() 
-	{
+	public void testEquals() {
 		String[] monoms = {"2", "-x","-3.2x^2","0","5x^3"};
-		for (int i=0; i<monoms.length; i++) 
-		{
+		for (int i=0; i<monoms.length; i++) {
 			Monom m = new Monom(monoms[i]);
 			String s = m.toString();
 			Monom m1 = new Monom(s);
@@ -147,17 +127,14 @@ public class MonomTest {
 	}
 
 	@Test
-	public void testInit() 
-	{//
+	public void testInit() {//
 
 	}
 
 	@Test
-	public void testCopy() 
-	{
+	public void testCopy() {
 		Monom [] copy = new Monom [5];
-		for(int i=0; i<mArr.length; i++) 
-		{
+		for(int i=0; i<mArr.length; i++) {
 			copy[i] = (Monom) mArr[i].copy();
 			assertEquals("Test copy: ", mArr[i], copy[i]);
 		}

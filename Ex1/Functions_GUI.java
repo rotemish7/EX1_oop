@@ -1,5 +1,7 @@
 package Ex1;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +34,7 @@ public class Functions_GUI implements functions
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class Functions_GUI implements functions
 	public boolean removeAll(Collection<?> c) 
 	{
 		funcs.removeAll(c);
-		
+
 		if (funcs.isEmpty())
 		{
 			return true;
@@ -158,7 +160,7 @@ public class Functions_GUI implements functions
 		{
 			PrintWriter pw = new PrintWriter(new File(fileName));
 			StringBuilder sb = new StringBuilder();
-			
+
 			for(int i=0; i<funcs.size(); i++)
 			{
 				sb.append(funcs.get(i).toString());
@@ -177,7 +179,43 @@ public class Functions_GUI implements functions
 	@Override
 	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution)
 	{
+		double ranX = rx.get_max()-rx.get_min();
+		double []x = new double [(int) ranX];
+		for (int j=0; j<funcs.size(); j++)
+		{
+			for (int i=0; i<x.length; i++)
+			{
+				x[i] = funcs.get(j).f(i);
+			}
+		}
+
+		StdDraw.setCanvasSize(width, height);
+		// rescale the coordinate system
+		StdDraw.setXscale(rx.get_min(), rx.get_max());
+		StdDraw.setYscale(ry.get_min(), ry.get_max());
 		
+		//vertical lines
+		StdDraw.setPenColor(Color.LIGHT_GRAY);
+		for (int i = (int) rx.get_min(); i <= rx.get_max(); i++) {
+			StdDraw.line(x[i], ry.get_min(), x[i], ry.get_max());
+		}
+		//horizontal lines
+		for (double i = ry.get_min(); i <= ry.get_max(); i++) {
+			StdDraw.line(rx.get_min(), i, rx.get_max(), i);
+		}
+		//x axis
+		StdDraw.setPenColor(Color.BLACK);
+		StdDraw.setPenRadius(0.005);
+		StdDraw.line(rx.get_min(), (ry.get_max()-ry.get_min())/2, rx.get_max(), (ry.get_max()-ry.get_min())/2);
+		StdDraw.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		for (int i = (int) rx.get_min(); i <= rx.get_max(); i=i+10) {
+			StdDraw.text(x[i]-0.07, -0.07, Double.toString(i-ranX/2));
+		}
+		//y axis
+		StdDraw.line((ranX)/2, ry.get_min(), (ranX)/2, ry.get_max());
+		for (double i = ry.get_min(); i <= ry.get_max(); i=i+0.5) {
+			StdDraw.text(x[(int) (ranX/2)]-0.07, i+0.07, Double.toString(i));
+		}
 	}
 
 	@Override
