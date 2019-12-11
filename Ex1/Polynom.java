@@ -262,22 +262,7 @@ public class Polynom implements Polynom_able
 		} 
 		return c;
 	}
-	/**
-	 * creating a New Polynom that is the copy of the Polynom_able being used
-	 */
-	//	@Override
-	//	public Polynom_able copy() 
-	//	{
-	//		Polynom_able copy = new Polynom();
-	//
-	//		for (int i = 0; i < this.poly.size(); i++) 
-	//		{
-	//			Monom m = new Monom(this.poly.get(i));
-	//			copy.add(m);
-	//		}
-	//
-	//		return copy;
-	//	}
+	
 	/**
 	 * applying the derivative action on the Polynom_able and update him 
 	 */
