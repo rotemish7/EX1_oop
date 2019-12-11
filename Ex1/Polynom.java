@@ -262,22 +262,7 @@ public class Polynom implements Polynom_able
 		} 
 		return c;
 	}
-	/**
-	 * creating a New Polynom that is the copy of the Polynom_able being used
-	 */
-	//	@Override
-	//	public Polynom_able copy() 
-	//	{
-	//		Polynom_able copy = new Polynom();
-	//
-	//		for (int i = 0; i < this.poly.size(); i++) 
-	//		{
-	//			Monom m = new Monom(this.poly.get(i));
-	//			copy.add(m);
-	//		}
-	//
-	//		return copy;
-	//	}
+	
 	/**
 	 * applying the derivative action on the Polynom_able and update him 
 	 */
@@ -393,35 +378,15 @@ public class Polynom implements Polynom_able
 
 	public boolean equals(Object obj)
 	{
-		boolean flag = false;
+		Polynom p = (Polynom)obj;
 		
-		if(obj.getClass() == Monom.class) 
+		for (int i = -10; i < 10; i++) 
 		{
-			Monom m = new Monom(0,0);
-			m = (Monom) obj;
-			flag = m.equals(this);
-		}
-		else if(obj.getClass() != Polynom.class)
-		{
-			flag = false;
-		}
-		else
-		{
-			Polynom p = new Polynom();
-			p = (Polynom) obj;
-			
-			for (int i = 0; i < this.poly.size(); i++) 
+			if(p.f(i) != this.f(i))
 			{
-				if(this.poly.get(i) != p.poly.get(i))
-				{
-					flag =  false;
-				}
-				else
-				{
-					flag = true;
-				}
+				return false;
 			}
 		}
-		return flag;
+		return true;
 	}
 }

@@ -306,28 +306,14 @@ public class Monom implements function
 
 	public boolean equals(Object obj)//new
 	{
-		boolean flag = false;
-		if(obj.getClass() == Polynom.class)
+		Monom m = (Monom)obj;
+		for (int i = -10; i < 10; i++) 
 		{
-			Polynom p = new Polynom();
-			p = (Polynom) obj;
-			if(p.poly.size() == 1)
+			if(m.f(i) != this.f(i))
 			{
-				flag = this.equals(p.poly.get(0));
+				return false;
 			}
 		}
-		else if(obj.getClass() != Monom.class) 
-		{
-			flag = false;
-		}
-		else
-		{
-			Monom m1 = new Monom(0,0);
-			Monom m2 = new Monom(0,0);
-			m1 = (Monom)obj;
-			m2 = (Monom)this;
-			flag = m1.equals(m2);
-		}
-		return flag;
+		return true;	
 	}
 }

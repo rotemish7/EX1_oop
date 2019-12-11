@@ -314,30 +314,15 @@ public class ComplexFunction implements complex_function
 
 	public boolean equals(Object obj)
 	{
-		boolean flag = false;
-		double ans=0, ans2=0;
-		for (int i=-10; i<10; i++)
+		ComplexFunction cf = (ComplexFunction)obj;
+		
+		for (int i = -10; i < 10; i++) 
 		{
-			ans = this.f(i);
-			if (obj.getClass() == Monom.class)
+			if(cf.f(i) != this.f(i))
 			{
-				Monom m = (Monom) obj;
-				ans2 = m.f(i);	
-			}
-			else if (obj.getClass() == Polynom.class)
-			{
-				Polynom p = (Polynom) obj;
-				ans2 = p.f(i);
-			}
-			if (ans == ans2)
-			{
-				flag = true;
-			}
-			else
-			{
-				flag = false;
+				return false;
 			}
 		}
-		return flag;
+		return true;
 	}
 }
