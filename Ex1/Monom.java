@@ -72,7 +72,7 @@ public class Monom implements function
 	 */
 	public double f(double x) 
 	{
-		double ans=0;
+		double ans = 0;
 		double p = this.get_power();
 		ans = this.get_coefficient()*Math.pow(x, p);
 		return ans;
@@ -306,14 +306,41 @@ public class Monom implements function
 
 	public boolean equals(Object obj)//new
 	{
-		Monom m = (Monom)obj;
-		for (int i = -10; i < 10; i++) 
+		if(obj instanceof function)
 		{
-			if(m.f(i) != this.f(i))
+			if(obj instanceof Monom)
 			{
-				return false;
+				Monom m = (Monom)obj;
+				return this.equals(m);
+			}
+			
+			if(obj instanceof Polynom)
+			{
+				Polynom p = (Polynom)obj;
+				
+				if(p.poly.size() > 1)
+				{
+					return false;
+				}
+				else
+				{
+					return this.equals(p.poly.get(0));
+				}
+			}
+			
+			if(obj instanceof ComplexFunction)
+			{
+				ComplexFunction cf = (ComplexFunction)obj;
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != cf.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
 			}
 		}
-		return true;	
+		return false;
 	}
 }

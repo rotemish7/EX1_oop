@@ -29,8 +29,10 @@ import Ex1.functions;
  * @author boaz_benmoshe
  *
  */
-class Functions_GUITest {
-	public static void main(String[] a) {
+class Functions_GUITest
+{
+	public static void main(String[] a) 
+	{
 		functions data = FunctionsFactory();
 	//	int w=1000, h=600, res=200;
 	//	Range rx = new Range(-10,10);
@@ -38,7 +40,8 @@ class Functions_GUITest {
 //		data.drawFunctions(w,h,rx,ry,res);
 		String file = "function_file.txt";
 		String file2 = "function_file2.txt";
-		try {
+		try 
+		{
 			data.saveToFile(file);
 			Functions_GUI data2 = new Functions_GUI();
 			data2.initFromFile(file);
@@ -55,52 +58,77 @@ class Functions_GUITest {
 //	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() throws Exception 
+	{
 		_data = FunctionsFactory();
 	}
 
 	//@Test
-	void testFunctions_GUI() {
+	void testFunctions_GUI() 
+	{
 	//	fail("Not yet implemented");
 	}
 
 	//@Test
-	void testInitFromFile() {
-	//	fail("Not yet implemented");
+	void testInitFromFile() 
+	{
+		String file = "InitWellDone.txt";
+		try
+		{
+			_data.saveToFile(file);
+			Functions_GUI data1 = new Functions_GUI();
+			data1.initFromFile(file);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	//@Test
-	void testSaveToFile() {
-		
-		
+	void testSaveToFile() 
+	{
+		String sfile = "saveToFile.txt";
+		try
+		{
+			_data.saveToFile(sfile);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}	
 	}
 
 	//@Test
-	void testDrawFunctions() {
-		//_data.drawFunctions();
-	//	fail("Not yet implemented");
+	void testDrawFunctions() 
+	{
+		_data.drawFunctions("GUI_params.txt");//Good
+		_data.drawFunctions("Wrong_GUI_params.txt");//Not good
 	}
 
 	@Test
-	void testDrawFunctionsIntIntRangeRangeInt() {
-		_data.drawFunctions("GUI_params.txt");
-		//fail("Not yet implemented");
+	void testDrawFunctionsIntIntRangeRangeInt() 
+	{
+		_data.drawFunctions(800,800, new Range(-10,10),new Range(-10,10),400);
 	}
-	public static functions FunctionsFactory() {
+	
+	public static functions FunctionsFactory()
+	{
 		functions ans = new Functions_GUI();
-		String s1 = "3.1 +2.4x^2 -x^4";
-		String s2 = "5 +2x -3.3x +0.1x^5";
-		String[] s3 = {"x +3","x -2", "x -4"};
+		String s1 = "3.1+2.4x^2-x^4";
+		String s2 = "5+2x-3.3x+0.1x^5";
+		String[] s3 = {"x+3","x-2","x-4"};
 		Polynom p1 = new Polynom(s1);
 		Polynom p2 = new Polynom(s2);
 		Polynom p3 = new Polynom(s3[0]);
 		ComplexFunction cf3 = new ComplexFunction(p3);
-		for(int i=1;i<s3.length;i++) {
+		for(int i=1;i<s3.length;i++) 
+		{
 			cf3.mul(new Polynom(s3[i]));
 		}
 		
 		ComplexFunction cf = new ComplexFunction(Operation.Plus, p1,p2);
-		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
+		ComplexFunction cf4 = new ComplexFunction("div",new Polynom("x+1"),cf3);
 		cf4.plus(new Monom("2"));
 		ans.add(cf.copy());
 		ans.add(cf4.copy());
@@ -115,7 +143,8 @@ class Functions_GUITest {
 		function f = iter.next();
 		ComplexFunction max = new ComplexFunction(f);
 		ComplexFunction min = new ComplexFunction(f);
-		while(iter.hasNext()) {
+		while(iter.hasNext()) 
+		{
 			f = iter.next();
 			max.max(f);
 			min.min(f);

@@ -65,7 +65,14 @@ public class MonomTest {
 	{
 		for(int i=0; i<mArr.length; i++) 
 		{
-			assertTrue("Test isZero:", mArr[i].isZero());
+			try
+			{
+			mArr[i].isZero();
+			}
+			catch (Exception e)
+			{
+				System.out.println(e);
+			}
 		}
 	}
 
@@ -83,18 +90,19 @@ public class MonomTest {
 	@Test
 	public void testF() 
 	{
-		double [] ansF = {-2,1,-3.2,0,-5};
+		double [] ansF = {2,1,-3.2,0,-5};
 		for(int i=0; i<mArr.length; i++) 
 		{
 			double f = mArr[i].f(-1);
-			assertEquals("Test f:",f,ansF[i],0.00001);
+			double ans = ansF[i];
+			assertEquals("Test f:",f,ans,0.00001);
 		}
 	}
 
 	@Test
 	public void testStringAndMonom() 
 	{
-		String[] monoms = {"2", "-x","-3.2x^2","0","5x^3"};
+		String[] monoms = {"+2.0", "-1.0x","-3.2x^2","0","+5.0x^3"};
 		for(int i=0; i<mArr.length; i++) 
 		{
 			Monom m = new Monom(monoms[i]);
@@ -105,31 +113,30 @@ public class MonomTest {
 		}		
 	}
 
-	// 2, -x, -3.2x^2, 0, 5x^3
 	@Test
 	public void testAdd() 
 	{
-			for(int i=0; i<mArr.length; i++) 
+		for(int i=0; i<mArr.length; i++) 
+		{
+			try
 			{
-				try
-				{
-					mArr[i].add(new Monom(-1,0));
-					mArr[i].add(new Monom (0.2,2));
-				}
-				catch (Exception e) {
-					System.out.println(e);
-				}
+				mArr[i].add(new Monom(-1,0));
+				mArr[i].add(new Monom (0.2,2));
 			}
+			catch (Exception e) {
+				System.out.println(e);
+			}
+		}
 	}
 
 	@Test
 	public void testMult() 
 	{
-		Monom [] ansMul = {new Monom ("-2"), new Monom ("1"), new Monom ("3.2x^2"), new Monom ("0"), new Monom ("-5x^3")} ;
+		Monom [] ansMul = {new Monom (-2,0) ,new Monom (1,1) ,new Monom (3.2,2), new Monom (0,0) ,new Monom (-5,3)};
 		for(int i=0; i<mArr.length; i++) 
 		{
-			mArr[i].multipy(new Monom(-1,0));
-			assertEquals("Test multipy: ", mArr[i], ansMul[i]);
+				mArr[i].multipy(new Monom(-1,0));
+				assertEquals("Test multipy", mArr[i], ansMul[i]);
 		}
 	}
 
@@ -147,9 +154,15 @@ public class MonomTest {
 	}
 
 	@Test
-	public void testInit() 
-	{//
-
+	public void testInitFromString()
+	{
+		String[] monoms = {"2", "-x","-3.2x^2","0","5x^3"};
+		for (int i=0; i<monoms.length; i++) 
+		{
+			Monom m = new Monom (0,0);
+			m.initFromString(monoms[i]);
+			assertEquals("Test initFromString: ", m, mArr[i]);
+		}
 	}
 
 	@Test

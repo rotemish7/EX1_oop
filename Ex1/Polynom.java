@@ -36,7 +36,7 @@ public class Polynom implements Polynom_able
 	{
 		int j=0;
 
-		for (int i=1; i<s.length(); i++) 
+		for (int i=0; i<s.length(); i++) 
 		{
 			if (s.charAt(i) == '+' || s.charAt(i) == '-') 
 			{
@@ -133,6 +133,13 @@ public class Polynom implements Polynom_able
 				Monom temp = ip1.next();
 				Monom m1 = new Monom ((temp.get_coefficient())*(-1),temp.get_power());
 				this.add(m1);
+			}
+		}
+		for (int i = 0; i < this.poly.size(); i++) 
+		{
+			if(this.poly.get(i).get_coefficient() == 0 || this.poly.get(i) == null)
+			{
+				this.poly.remove(this.poly.get(i));
 			}
 		}
 		Collections.sort(this.poly, new Monom_Comperator());
@@ -262,7 +269,7 @@ public class Polynom implements Polynom_able
 		} 
 		return c;
 	}
-	
+
 	/**
 	 * applying the derivative action on the Polynom_able and update him 
 	 */
@@ -355,7 +362,7 @@ public class Polynom implements Polynom_able
 	public function initFromString(String s)
 	{
 		Polynom p = new Polynom(s);
-		
+
 		for (int i = 0; i < p.poly.size(); i++) 
 		{
 			Monom m = new Monom(p.poly.get(i));
@@ -378,15 +385,55 @@ public class Polynom implements Polynom_able
 
 	public boolean equals(Object obj)
 	{
-		Polynom p = (Polynom)obj;
-		
-		for (int i = -10; i < 10; i++) 
+		if(obj instanceof function)
 		{
-			if(p.f(i) != this.f(i))
+			if(obj instanceof Monom)
 			{
-				return false;
+				Monom m = (Monom)obj;
+				if(this.poly.size() > 1)
+				{
+					return false;
+				}
+				else
+				{
+					return m.equals(this.poly.get(0));
+				}
+			}
+
+			if(obj instanceof Polynom)
+			{
+				Polynom p = (Polynom)obj;
+				if(this.poly.size() == p.poly.size())
+				{
+					for (int i = 0; i < this.poly.size(); i++) 
+					{
+						if(!this.poly.get(i).equals(p.poly.get(i)))
+						{
+							return false;
+						}
+					}
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			if(obj instanceof ComplexFunction)
+			{			
+				ComplexFunction cf = (ComplexFunction)obj;
+
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != cf.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }

@@ -6,16 +6,27 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.google.gson.Gson;
+
 public class Functions_GUI implements functions 
 {
-	ArrayList<function> funcs = new ArrayList<function>();
+	ArrayList<function> funcs;
+	
+	public Functions_GUI()
+	{
+		funcs = new ArrayList<function>();
+	}
 
+	//static array for the functions colors
+	public static Color[] Colors = {Color.blue, Color.cyan,Color.MAGENTA, Color.ORANGE, Color.red, Color.GREEN, Color.PINK};
+	
 	@Override
 	public boolean add(function e) 
 	{
@@ -34,7 +45,6 @@ public class Functions_GUI implements functions
 			return true;
 		}
 		return false;
-
 	}
 
 	@Override
@@ -130,19 +140,27 @@ public class Functions_GUI implements functions
 	}
 
 	@Override
+	/**
+	 * initialize from a file
+	 */
 	public void initFromFile(String file) throws IOException 
 	{
-		String csvFile = file;
 		String line = "";
 
 		try 
 		{
-			BufferedReader br = new BufferedReader(new FileReader(csvFile));
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
 			int i = 0;
+			
 			while ((line = br.readLine()) != null) 
 			{
-				funcs.get(i++).initFromString(line);
+				this.funcs.get(i++).initFromString(line);
+				line = br.readLine();
 			}
+			br.close();
+			fr.close();
+			
 		} 
 		catch (IOException e) 
 		{
@@ -152,22 +170,28 @@ public class Functions_GUI implements functions
 	}
 
 	@Override
+	/**
+	 * saving to a file
+	 */
 	public void saveToFile(String file) throws IOException 
 	{
-		String fileName = "functions.txt";
-
+		
 		try 
 		{
-			PrintWriter pw = new PrintWriter(new File(fileName));
-			StringBuilder sb = new StringBuilder();
+			FileWriter fw = new FileWriter(file);
+			PrintWriter pw = new PrintWriter(new File(file));
+			//StringBuilder sb = new StringBuilder();
 
 			for(int i=0; i<funcs.size(); i++)
 			{
-				sb.append(funcs.get(i).toString());
-				sb.append("\n");
+				pw.println(funcs.get(i).toString());
+				pw.close();
+				fw.close();
+//				sb.append(funcs.get(i).toString());
+//				sb.append("\n");
 			}
-			pw.write(sb.toString());
-			pw.close();
+//			pw.write(sb.toString());
+//			pw.close();
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -177,50 +201,93 @@ public class Functions_GUI implements functions
 	}
 
 	@Override
+	/**
+	 * function that draws the functions in the arraylist
+	 */
 	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution)
 	{
-		double ranX = rx.get_max()-rx.get_min();
-		double []x = new double [(int) ranX];
-		for (int j=0; j<funcs.size(); j++)
-		{
-			for (int i=0; i<x.length; i++)
-			{
-				x[i] = funcs.get(j).f(i);
-			}
-		}
+		double[] x = new double[resolution+1];
+		double[] y = new double[resolution+1];
+		double rangeX = rx.get_max()-rx.get_min();
+		double rangeY = ry.get_max()-ry.get_min();
 
+		//Set the canvas size
 		StdDraw.setCanvasSize(width, height);
 		// rescale the coordinate system
 		StdDraw.setXscale(rx.get_min(), rx.get_max());
 		StdDraw.setYscale(ry.get_min(), ry.get_max());
 		
-		//vertical lines
+		//Drawing vertical lines
 		StdDraw.setPenColor(Color.LIGHT_GRAY);
-		for (int i = (int) rx.get_min(); i <= rx.get_max(); i++) {
-			StdDraw.line(x[i], ry.get_min(), x[i], ry.get_max());
+		for (int i = (int)rx.get_min(); i <= rx.get_max(); i++)
+		{
+			StdDraw.line(i, ry.get_min(), i, ry.get_max());
 		}
-		//horizontal lines
-		for (double i = ry.get_min(); i <= ry.get_max(); i++) {
+		//Drawing horizontal lines
+		for (double i = ry.get_min(); i < ry.get_max(); i++)
+		{
 			StdDraw.line(rx.get_min(), i, rx.get_max(), i);
 		}
-		//x axis
+		//Drawing the x axis and numbers
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.setPenRadius(0.005);
-		StdDraw.line(rx.get_min(), (ry.get_max()-ry.get_min())/2, rx.get_max(), (ry.get_max()-ry.get_min())/2);
+		StdDraw.line(rx.get_min(), 0, rx.get_max(), 0);
 		StdDraw.setFont(new Font("TimesRoman", Font.BOLD, 15));
-		for (int i = (int) rx.get_min(); i <= rx.get_max(); i=i+10) {
-			StdDraw.text(x[i]-0.07, -0.07, Double.toString(i-ranX/2));
+		
+		for (int i = (int)rx.get_min(); i < rx.get_max()+1; i++) 
+		{
+			StdDraw.text(i-0.07, -0.3, Integer.toString(i));
 		}
-		//y axis
-		StdDraw.line((ranX)/2, ry.get_min(), (ranX)/2, ry.get_max());
-		for (double i = ry.get_min(); i <= ry.get_max(); i=i+0.5) {
-			StdDraw.text(x[(int) (ranX/2)]-0.07, i+0.07, Double.toString(i));
+
+		//Drawing the y axis and numbers
+		StdDraw.line(0,ry.get_min(),0,ry.get_max());
+		for (int i = (int)ry.get_min(); i < ry.get_max(); i++)
+		{
+			StdDraw.text(x[resolution/2]-0.2, i-0.07, Integer.toString(i));
+		}
+
+		for(int i= 0; i<funcs.size();i++)
+		{
+			// sampled at resolution points in the y value of the function in the array  for rx range
+			for (int j = 0; j <= resolution; j++) 
+			{
+				  x[j] = rx.get_min()+j*rangeX/resolution;
+				  y[j] = this.funcs.get(i).f(x[j]);
+			}
+			//set the pen Color and size for the functions
+			StdDraw.setPenColor(Colors[i%6]);
+			StdDraw.setPenRadius(0.005);
+		
+			// plot the approximation to the function
+			for (int j = 0; j < resolution; j++)
+			{
+				StdDraw.line(x[j], y[j], x[j+1], y[j+1]);				
+			}
+			//printing the function number in the arraylist + color + the function itself
+			System.out.println(i+")"+Colors[i%6]+"    f(x)="+this.funcs.get(i).toString());
 		}
 	}
 
 	@Override
+	/**
+	 * drawing the function from a json file
+	 */
 	public void drawFunctions(String json_file)
 	{
-
+		Gson gson = new Gson();
+		try 
+		{
+			FileReader reader = new FileReader(json_file);
+			param	parameters = gson.fromJson(reader,param.class);
+			Range rx = new Range(0,0);
+			rx = parameters.getRange(parameters.Range_X);
+			Range ry = new Range(0,0);
+			ry = parameters.getRange(parameters.Range_Y);
+			this.drawFunctions(parameters.Width,parameters.Height,rx, ry,parameters.Resolution);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -2,9 +2,9 @@ package Ex1;
 
 public class ComplexFunction implements complex_function 
 {
-	function right;
-	function left;
-	Operation op;
+	private function right;
+	private function left;
+	private Operation op;
 
 	public  ComplexFunction(function f1) 
 	{
@@ -15,6 +15,22 @@ public class ComplexFunction implements complex_function
 
 	public ComplexFunction(Operation op, function f1, function f2) 
 	{
+		if (op == Operation.None && f2 != null)
+		{
+			T_exception();
+		}
+		if (f2 == null && op != Operation.None)
+		{
+			T_exception();
+		}
+		if (op == Operation.Error)
+		{
+			T_exception();
+		}
+		if (f1 == null)
+		{
+			T_exception();
+		}
 		this.left = f1;
 		this.right = f2;
 		this.op = op;
@@ -22,32 +38,61 @@ public class ComplexFunction implements complex_function
 
 	public ComplexFunction(String str, function polynom, function cf) 
 	{
-		if (str.equals("plus"))
+		if (polynom == null)
+		{
+			T_exception();
+		}
+		if (str.equals("plus") || str.equals("Plus"))
 		{
 			this.op = Operation.Plus;
 		}
-		else if (str.equals("mul"))
+		else if (str.equals("mul") || str.equals("Times"))
 		{
 			this.op = Operation.Times;
 		}
-		else if (str.equals("div"))
+		else if (str.equals("div") || str.equals("Divide"))
 		{
 			this.op = Operation.Divid;
 		}
-		else if (str.equals("max"))
+		else if (str.equals("max") || str.equals("Max"))
 		{
 			this.op = Operation.Max;
 		}
-		else if (str.equals("min"))
+		else if (str.equals("min") || str.equals("Min"))
 		{
 			this.op = Operation.Min;
 		}
-		else if (str.equals("comp"))
+		else if (str.equals("comp") || str.equals("Comp"))
 		{
 			this.op = Operation.Comp;
 		}
+		else if (str.equals("None") || str.equals("none") && cf == null)
+		{
+			this.op = Operation.None;
+		}
+		else if (str.equals("error") || str.equals("Error"))
+		{
+			T_exception();
+		}
+		if (cf == null && (!str.equals("none")))
+		{
+			T_exception();	
+		}
 		this.left = polynom;
 		this.right = cf;
+	}
+	
+	public static void T_exception()
+	{
+		try
+		{ 
+			throw new NullPointerException("Exception"); 
+		} 
+		catch(NullPointerException e) 
+		{ 
+			System.out.println("Not a valid ComplexFunction"); 
+			throw e; // rethrowing the exception 
+		} 
 	}
 
 	/** Add to this complex_function the f1 complex_function
@@ -58,16 +103,29 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
-			this.left = this;
-			this.right = f1;
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Plus;
 		} 
 		else 
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Plus;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Plus;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Plus;
+			}
 		}
 	}
 	/** Multiply this complex_function with the f1 complex_function
@@ -77,17 +135,30 @@ public class ComplexFunction implements complex_function
 	public void mul(function f1) 
 	{
 		if(this.right == null) 
-		{
-			this.left = this;
-			this.right = f1;
+		{	
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Times;
 		} 
 		else 
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Times;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Times;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Times;
+			}
 		}
 	}
 	/** Divides this complex_function with the f1 complex_function
@@ -96,18 +167,36 @@ public class ComplexFunction implements complex_function
 	 */
 	public void div(function f1) 
 	{
+		Polynom pZero = new Polynom("0");
 		if(this.right == null) 
 		{
-			this.left = this;
-			this.right = f1;
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Divid;
-		} 
+		}
+		else if(this.right == pZero)
+		{
+			T_exception();
+		}
 		else 
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Divid;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Divid;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Divid;
+			}
 		}
 	}
 	/** Computes the maximum over this complex_function and the f1 complex_function
@@ -118,16 +207,29 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
-			this.left = this;
-			this.right = f1;
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Max;
 		} 
 		else 
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Max;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Max;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Max;
+			}
 		}		
 	}
 	/** Computes the minimum over this complex_function and the f1 complex_function
@@ -138,16 +240,29 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
-			this.left = this;
-			this.right = f1;
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Min;
 		} 
-		else 
+		else
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Min;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Min;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Min;
+			}
 		}
 	}
 	/**
@@ -158,16 +273,29 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
-			this.left = this;
-			this.right = f1;
+			function temp = f1.copy();
+			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
+			this.left = new_left;
+			this.right = temp;
 			this.op = Operation.Comp;
 		} 
 		else 
 		{
-			ComplexFunction CF = new ComplexFunction(this);
-			this.left = CF;
-			this.right = f1;
-			this.op = Operation.Comp;
+			if(this == f1)
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				ComplexFunction CF2 = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = CF2;
+				this.op = Operation.Comp;
+			}
+			else
+			{
+				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
+				this.left = CF;
+				this.right = f1;
+				this.op = Operation.Comp;
+			}
 		}
 
 	}
@@ -237,27 +365,27 @@ public class ComplexFunction implements complex_function
 			if (s.charAt(i) == '(' && count == 0)
 			{
 				String str = s.substring(0, i);
-				if (str.equals("plus"))
+				if (str.equals("plus") || str.equals("Plus"))
 				{
 					oper = Operation.Plus;
 				}
-				else if (str.equals("mul"))
+				else if (str.equals("mul") || str.equals("Times"))
 				{
 					oper = Operation.Times;
 				}
-				else if (str.equals("div"))
+				else if (str.equals("div") || str.equals("Divid"))
 				{
 					oper = Operation.Divid;
 				}
-				else if (str.equals("max"))
+				else if (str.equals("max") || str.equals("Max"))
 				{
 					oper = Operation.Max;
 				}
-				else if (str.equals("min"))
+				else if (str.equals("min") || str.equals("Min"))
 				{
 					oper = Operation.Min;
 				}
-				else if (str.equals("comp"))
+				else if (str.equals("comp") || str.equals("Comp"))
 				{
 					oper = Operation.Comp;
 				}
@@ -308,21 +436,69 @@ public class ComplexFunction implements complex_function
 	public String toString()
 	{
 		String ans = "";
-		ans += this.op + "(" + this.left + "," + this.right + ")";			
+		if(this.right == null)
+		{
+			if(this.op == Operation.None)
+			{
+				ans += "(" + this.left + ")";
+			}
+			else
+			{				
+				T_exception();
+			}
+		}
+		else
+		{			
+			ans += this.op + "(" + this.left + "," + this.right + ")";			
+		}
 		return ans;
 	}
 
 	public boolean equals(Object obj)
 	{
-		ComplexFunction cf = (ComplexFunction)obj;
-		
-		for (int i = -10; i < 10; i++) 
+		if(obj instanceof function)
 		{
-			if(cf.f(i) != this.f(i))
+			if(obj instanceof Monom)
 			{
-				return false;
+				Monom m = (Monom)obj; 
+				for (int i = -10; i <10; i++) 
+				{
+					if(this.f(i) != m.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+
+			if(obj instanceof Polynom)
+			{
+				Polynom p = (Polynom)obj;
+				
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != p.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+
+			if(obj instanceof ComplexFunction)
+			{			
+				ComplexFunction cf = (ComplexFunction)obj;
+
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != cf.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }
