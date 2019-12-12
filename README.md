@@ -22,6 +22,28 @@ Polynom class
 each Polynom is composed of a several monom saved in an arraylist
 
 main functions are:
+copy - making a copy of the polynom.
+equals - return a true or false comparing two objects of type function
+
+ComplexFunction class
+
+each complexFUnction is composed of an Operation(plus,mul,div,max,min,comp,none,error), a left function and a right function.
+the left function is always the first to create, there is no possibility for a right function to exsit and a left one not.
+if there is not two functions the right one will be null and operation will be none.
+
+main functions are:
+
+plus,mul,div,max,min and etc.
+copy-making a copy of the complexfunction.
+initfromstring - initialize a complex function from a string.
+equals - return a true or false answer when comparing two objects of functions
+
+FunctionGUi class
+
+The main functions here are draw with given parameters and draw with parameters given in a file.
+there are another two important function: initfromfile,savetofile.
+initfromfile- reading each line from the file and making a new function that added to function list from it we can draw.
+savetofile- writing to a file all the functions in the list created.
 
 
 
