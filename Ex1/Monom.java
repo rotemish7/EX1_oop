@@ -306,28 +306,41 @@ public class Monom implements function
 
 	public boolean equals(Object obj)//new
 	{
-		boolean flag = false;
-		if(obj.getClass() == Polynom.class)
+		if(obj instanceof function)
 		{
-			Polynom p = new Polynom();
-			p = (Polynom) obj;
-			if(p.poly.size() == 1)
+			if(obj instanceof Monom)
 			{
-				flag = this.equals(p.poly.get(0));
+				Monom m = (Monom)obj;
+				return this.equals(m);
+			}
+			
+			if(obj instanceof Polynom)
+			{
+				Polynom p = (Polynom)obj;
+				
+				if(p.poly.size() > 1)
+				{
+					return false;
+				}
+				else
+				{
+					return this.equals(p.poly.get(0));
+				}
+			}
+			
+			if(obj instanceof ComplexFunction)
+			{
+				ComplexFunction cf = (ComplexFunction)obj;
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != cf.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
 			}
 		}
-		else if(obj.getClass() != Monom.class) 
-		{
-			flag = false;
-		}
-		else
-		{
-			Monom m1 = new Monom(0,0);
-			Monom m2 = new Monom(0,0);
-			m1 = (Monom)obj;
-			m2 = (Monom)this;
-			flag = m1.equals(m2);
-		}
-		return flag;
+		return false;
 	}
 }

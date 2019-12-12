@@ -111,7 +111,8 @@ public class PolynomTest0 {
 			p2.add(m);
 		}
 		// mult p1*Monom(m)
-		Monom m1 = new Monom (1,1);
+		System.out.println(p1);
+		Monom m1 = new Monom (0,0);
 		p1.multiply(m1);
 		System.out.println("p1*Monom(m): " + p1);
 		
@@ -136,7 +137,15 @@ public class PolynomTest0 {
 		System.out.println("p1 is zero?: " + p1.isZero());
 
 		// root
-		System.out.println("root: " + p2.root(-50, 84, 0.000001));
+		Polynom p = new Polynom();
+		p.add(new Monom (2,0));
+		p.add(new Monom (-1,1));
+		p.add(new Monom (-3.2,2));
+		p.add(new Monom (0,0));
+		p.add(new Monom (5,3));
+		System.out.println(p);
+		System.out.println("root: " + p.root(-50, 84, 0.000001));
+		//
 	}
 }
 

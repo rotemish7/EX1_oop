@@ -8,9 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import com.google.gson.Gson;
 
 public class Functions_GUI implements functions 
 {
@@ -179,15 +182,28 @@ public class Functions_GUI implements functions
 	@Override
 	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution)
 	{
-		double ranX = rx.get_max()-rx.get_min();
-		double []x = new double [(int) ranX];
-		for (int j=0; j<funcs.size(); j++)
-		{
-			for (int i=0; i<x.length; i++)
+//		double ranX = rx.get_max()-rx.get_min();
+//		double []x = new double [(int) ranX+1];
+//		double []y = new double [(int) ranX+1];
+//			for (int i= (int)rx.get_min(); i<rx.get_max(); i++)
+//			{
+//				x[i] = i;
+//			}
+//			for (int i = 0; i < y.length; i++)
+//			{
+//				y[i] = funcs.get(i).f(i);
+//			}
+			double[] x = new double[resolution+1];
+			double[] y = new double[resolution+1];
+			double rangeX = rx.get_max()-rx.get_min();
+			double rangeY = ry.get_max()-ry.get_min();
+			
+			for (int i = 0; i <= x.length; i++) 
 			{
-				x[i] = funcs.get(j).f(i);
+			x[i] = rx.get_max()+rangeX * i / resolution;
+			y[i] = funcs.get(i).f(x[i]);
 			}
-		}
+			// 
 
 		StdDraw.setCanvasSize(width, height);
 		// rescale the coordinate system
@@ -196,11 +212,13 @@ public class Functions_GUI implements functions
 		
 		//vertical lines
 		StdDraw.setPenColor(Color.LIGHT_GRAY);
-		for (int i = (int) rx.get_min(); i <= rx.get_max(); i++) {
-			StdDraw.line(x[i], ry.get_min(), x[i], ry.get_max());
+		for (int i = 0; i <= rangeX; i++) 
+		{
+			StdDraw.line(i, ry.get_min(), x[i], ry.get_max());
 		}
 		//horizontal lines
-		for (double i = ry.get_min(); i <= ry.get_max(); i++) {
+		for (double i = ry.get_min(); i <= ry.get_max(); i++) 
+		{
 			StdDraw.line(rx.get_min(), i, rx.get_max(), i);
 		}
 		//x axis
@@ -208,19 +226,42 @@ public class Functions_GUI implements functions
 		StdDraw.setPenRadius(0.005);
 		StdDraw.line(rx.get_min(), (ry.get_max()-ry.get_min())/2, rx.get_max(), (ry.get_max()-ry.get_min())/2);
 		StdDraw.setFont(new Font("TimesRoman", Font.BOLD, 15));
-		for (int i = (int) rx.get_min(); i <= rx.get_max(); i=i+10) {
-			StdDraw.text(x[i]-0.07, -0.07, Double.toString(i-ranX/2));
+		
+		for (int i = (int) rx.get_min(); i <= rx.get_max(); i=i+10) 
+		{
+			StdDraw.text(x[i]-0.07, -0.07, Double.toString(i-rangeX/2));
 		}
 		//y axis
-		StdDraw.line((ranX)/2, ry.get_min(), (ranX)/2, ry.get_max());
-		for (double i = ry.get_min(); i <= ry.get_max(); i=i+0.5) {
-			StdDraw.text(x[(int) (ranX/2)]-0.07, i+0.07, Double.toString(i));
+		StdDraw.line((rangeX)/2, ry.get_min(), (rangeX)/2, ry.get_max());
+		
+		for (double i = ry.get_min(); i <= ry.get_max(); i=i+0.5) 
+		{
+			StdDraw.text(x[(int) (rangeX/2)]-0.07, i+0.07, Double.toString(i));
+		}
+		
+		for (int i = 0; i < rangeX; i++) 
+		{
+			StdDraw.line(x[i], y[i], x[i+1], y[i+1]);
 		}
 	}
 
 	@Override
 	public void drawFunctions(String json_file)
 	{
-
+		Gson gson = new Gson();
+		try 
+		{
+			FileReader reader = new FileReader(json_file);
+			param	parameters = gson.fromJson(reader,param.class);
+			Range rx = new Range(0,0);
+			rx = parameters.getRange(parameters.Range_X);
+			Range ry = new Range(0,0);
+			ry = parameters.getRange(parameters.Range_Y);
+			drawFunctions(parameters.Width,parameters.Height,rx, ry,parameters.Resolution);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 }

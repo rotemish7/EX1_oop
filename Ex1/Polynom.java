@@ -135,6 +135,13 @@ public class Polynom implements Polynom_able
 				this.add(m1);
 			}
 		}
+		for (int i=0; i<this.poly.size(); i++)
+		{
+			if (this.poly.get(i).get_coefficient() == 0)
+			{
+				this.poly.remove(this.poly.get(i));
+			}
+		}
 		Collections.sort(this.poly, new Monom_Comperator());
 	}
 	/**
@@ -278,7 +285,6 @@ public class Polynom implements Polynom_able
 			Monom m2 = new Monom(m1.derivative());
 			p1.add(m2);
 		}
-
 		return p1;
 	}
 	/**
@@ -378,35 +384,55 @@ public class Polynom implements Polynom_able
 
 	public boolean equals(Object obj)
 	{
-		boolean flag = false;
-		
-		if(obj.getClass() == Monom.class) 
+		if(obj instanceof function)
 		{
-			Monom m = new Monom(0,0);
-			m = (Monom) obj;
-			flag = m.equals(this);
-		}
-		else if(obj.getClass() != Polynom.class)
-		{
-			flag = false;
-		}
-		else
-		{
-			Polynom p = new Polynom();
-			p = (Polynom) obj;
-			
-			for (int i = 0; i < this.poly.size(); i++) 
+			if(obj instanceof Monom)
 			{
-				if(this.poly.get(i) != p.poly.get(i))
+				Monom m = (Monom)obj;
+				if(this.poly.size() > 1)
 				{
-					flag =  false;
+					return false;
 				}
 				else
 				{
-					flag = true;
+					return m.equals(this.poly.get(0));
 				}
 			}
+
+			if(obj instanceof Polynom)
+			{
+				Polynom p = (Polynom)obj;
+				if(this.poly.size() == p.poly.size())
+				{
+					for (int i = 0; i < this.poly.size(); i++) 
+					{
+						if(!this.poly.get(i).equals(p.poly.get(i)))
+						{
+							return false;
+						}
+					}
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			if(obj instanceof ComplexFunction)
+			{			
+				ComplexFunction cf = (ComplexFunction)obj;
+
+				for (int i = -10; i < 10; i++) 
+				{
+					if(this.f(i) != cf.f(i))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
 		}
-		return flag;
+		return false;
 	}
 }

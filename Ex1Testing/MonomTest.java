@@ -154,9 +154,15 @@ public class MonomTest {
 	}
 
 	@Test
-	public void testInit() 
-	{//
-
+	public void testInitFromString()
+	{
+		String[] monoms = {"2", "-x","-3.2x^2","0","5x^3"};
+		for (int i=0; i<monoms.length; i++) 
+		{
+			Monom m = new Monom (0,0);
+			m.initFromString(monoms[i]);
+			assertEquals("Test initFromString: ", m, mArr[i]);
+		}
 	}
 
 	@Test
