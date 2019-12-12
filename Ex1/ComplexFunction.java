@@ -95,6 +95,20 @@ public class ComplexFunction implements complex_function
 		} 
 	}
 
+	public static void T_exception()
+	{
+		try
+		{ 
+			throw new NullPointerException("Exception"); 
+		} 
+		catch(NullPointerException e) 
+		{ 
+			System.out.println("Not a valid ComplexFunction"); 
+			throw e; // rethrowing the exception 
+		} 
+	}
+
+
 	/** Add to this complex_function the f1 complex_function
 	 * 
 	 * @param f1 the complex_function which will be added to this complex_function.
@@ -103,10 +117,15 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
+<<<<<<< HEAD
 			function temp = f1.copy();
 			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
 			this.left = new_left;
 			this.right = temp;
+=======
+			this.left = this.copy();
+			this.right = f1;
+>>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			this.op = Operation.Plus;
 		} 
 		else 
@@ -167,6 +186,7 @@ public class ComplexFunction implements complex_function
 	 */
 	public void div(function f1) 
 	{
+<<<<<<< HEAD
 		Polynom pZero = new Polynom("0");
 		if(this.right == null) 
 		{
@@ -182,6 +202,21 @@ public class ComplexFunction implements complex_function
 		}
 		else 
 		{
+=======
+		Polynom pZero = new Polynom ("0");
+		if(this.right == null) 
+		{
+			this.left = this.copy();
+			this.right = f1;
+			this.op = Operation.Divid;
+		} 
+		else if (this.right == pZero)
+		{
+			T_exception();
+		}
+		else
+		{
+>>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			if(this == f1)
 			{
 				ComplexFunction CF = new ComplexFunction(this.op,this.left,this.right);
@@ -207,10 +242,15 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
+<<<<<<< HEAD
 			function temp = f1.copy();
 			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
 			this.left = new_left;
 			this.right = temp;
+=======
+			this.left = this.copy();
+			this.right = f1;
+>>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			this.op = Operation.Max;
 		} 
 		else 
@@ -240,10 +280,15 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
+<<<<<<< HEAD
 			function temp = f1.copy();
 			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
 			this.left = new_left;
 			this.right = temp;
+=======
+			this.left = this.copy();
+			this.right = f1;
+>>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			this.op = Operation.Min;
 		} 
 		else
@@ -273,10 +318,15 @@ public class ComplexFunction implements complex_function
 	{
 		if(this.right == null) 
 		{
+<<<<<<< HEAD
 			function temp = f1.copy();
 			ComplexFunction new_left = new ComplexFunction(this.op,this.left,this.right);
 			this.left = new_left;
 			this.right = temp;
+=======
+			this.left = this.copy();
+			this.right = f1;
+>>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			this.op = Operation.Comp;
 		} 
 		else 

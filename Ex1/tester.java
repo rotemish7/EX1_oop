@@ -1,5 +1,7 @@
 package Ex1;
 
+import java.util.ArrayList;
+
 public class tester 
 {
 
@@ -44,6 +46,13 @@ public class tester
 		function f8 = new ComplexFunction(null);
 		f8.initFromString(str1);
 		System.out.println("f8 = " + f8);
+	
+		Range rx = new Range(20.0, 20.0);
+		Range ry = new Range(20.0, 20.0);
+		ArrayList<function> func = new ArrayList<function>();
+		func.add(f8);
+		
+		drawFunctions(10,10,rx,ry,100);
 		
 		
 		
