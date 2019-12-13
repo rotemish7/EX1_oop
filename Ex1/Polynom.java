@@ -135,15 +135,9 @@ public class Polynom implements Polynom_able
 				this.add(m1);
 			}
 		}
-<<<<<<< HEAD
 		for (int i = 0; i < this.poly.size(); i++) 
 		{
 			if(this.poly.get(i).get_coefficient() == 0 || this.poly.get(i) == null)
-=======
-		for (int i=0; i<this.poly.size(); i++)
-		{
-			if (this.poly.get(i).get_coefficient() == 0)
->>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			{
 				this.poly.remove(this.poly.get(i));
 			}
@@ -275,11 +269,7 @@ public class Polynom implements Polynom_able
 		} 
 		return c;
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 	/**
 	 * applying the derivative action on the Polynom_able and update him 
 	 */
@@ -295,6 +285,7 @@ public class Polynom implements Polynom_able
 			Monom m2 = new Monom(m1.derivative());
 			p1.add(m2);
 		}
+
 		return p1;
 	}
 	/**
@@ -397,7 +388,6 @@ public class Polynom implements Polynom_able
 		if(obj instanceof function)
 		{
 			if(obj instanceof Monom)
-<<<<<<< HEAD
 			{
 				Monom m = (Monom)obj;
 				if(this.poly.size() > 1)
@@ -430,40 +420,6 @@ public class Polynom implements Polynom_able
 				}
 			}
 
-=======
-			{
-				Monom m = (Monom)obj;
-				if(this.poly.size() > 1)
-				{
-					return false;
-				}
-				else
-				{
-					return m.equals(this.poly.get(0));
-				}
-			}
-
-			if(obj instanceof Polynom)
-			{
-				Polynom p = (Polynom)obj;
-				if(this.poly.size() == p.poly.size())
-				{
-					for (int i = 0; i < this.poly.size(); i++) 
-					{
-						if(!this.poly.get(i).equals(p.poly.get(i)))
-						{
-							return false;
-						}
-					}
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-
->>>>>>> 13d47ae52bf91db299f8d797fed97115b661c75b
 			if(obj instanceof ComplexFunction)
 			{			
 				ComplexFunction cf = (ComplexFunction)obj;
