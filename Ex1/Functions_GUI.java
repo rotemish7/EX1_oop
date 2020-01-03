@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 public class Functions_GUI implements functions 
 {
 	ArrayList<function> funcs;
-	
+
 	public Functions_GUI()
 	{
 		funcs = new ArrayList<function>();
@@ -27,7 +27,7 @@ public class Functions_GUI implements functions
 
 	//static array for the functions colors
 	public static Color[] Colors = {Color.blue, Color.cyan,Color.MAGENTA, Color.ORANGE, Color.red, Color.GREEN, Color.PINK};
-	
+
 	@Override
 	public boolean add(function e) 
 	{
@@ -153,15 +153,21 @@ public class Functions_GUI implements functions
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			int i = 0;
-			
+
 			while ((line = br.readLine()) != null) 
 			{
-				this.funcs.get(i++).initFromString(line);
-				line = br.readLine();
+				try
+				{
+					this.funcs.get(i++).initFromString(line);
+					line = br.readLine();				
+				}
+				catch(Exception e) {
+
+				}
 			}
 			br.close();
 			fr.close();
-			
+
 		} 
 		catch (IOException e) 
 		{
@@ -180,7 +186,7 @@ public class Functions_GUI implements functions
 		{
 			FileWriter fw = new FileWriter(file);
 			PrintWriter pw = new PrintWriter(new File(file));
-		
+
 			for(int i=0; i<funcs.size(); i++)
 			{
 				pw.println(funcs.get(i).toString());
@@ -211,7 +217,7 @@ public class Functions_GUI implements functions
 		// rescale the coordinate system
 		StdDraw.setXscale(rx.get_min(), rx.get_max());
 		StdDraw.setYscale(ry.get_min(), ry.get_max());
-		
+
 		//Drawing vertical lines
 		StdDraw.setPenColor(Color.LIGHT_GRAY);
 		for (int i = (int)rx.get_min(); i <= rx.get_max(); i++)
@@ -228,7 +234,7 @@ public class Functions_GUI implements functions
 		StdDraw.setPenRadius(0.005);
 		StdDraw.line(rx.get_min(), 0, rx.get_max(), 0);
 		StdDraw.setFont(new Font("TimesRoman", Font.BOLD, 15));
-		
+
 		for (int i = (int)rx.get_min(); i < rx.get_max()+1; i++) 
 		{
 			StdDraw.text(i-0.07, -0.3, Integer.toString(i));
@@ -246,13 +252,13 @@ public class Functions_GUI implements functions
 			// sampled at resolution points in the y value of the function in the array  for rx range
 			for (int j = 0; j <= resolution; j++) 
 			{
-				  x[j] = rx.get_min()+j*rangeX/resolution;
-				  y[j] = this.funcs.get(i).f(x[j]);
+				x[j] = rx.get_min()+j*rangeX/resolution;
+				y[j] = this.funcs.get(i).f(x[j]);
 			}
 			//set the pen Color and size for the functions
 			StdDraw.setPenColor(Colors[i%6]);
 			StdDraw.setPenRadius(0.005);
-		
+
 			// plot the approximation to the function
 			for (int j = 0; j < resolution; j++)
 			{
